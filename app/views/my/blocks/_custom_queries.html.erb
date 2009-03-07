@@ -1,0 +1,24 @@
+<h3><%= l(:label_query_plural) %></h3>
+
+<% form_tag({}) do %>
+	<table class="list queries">		
+		<thead><tr>
+		<th><%=l(:label_query)%></th>
+		<th>#</th>
+		</tr></thead>
+		<tbody>	
+		<% sidebar_queries.each do |query|
+			issue_count = Issue.count(:include => [:status, :project], :conditions => query.statement)
+		%>
+		<tr class="<%= cycle('odd', 'even') %> <%= 'empty' if issue_count == 0 %>">
+			<td class="query"><%= link_to(h(query.name), :controller => 'issues', :action => 'index', :project_id => @project, :query_id => query) %></td>
+			<td class="count"><%= issue_count %></td>
+		</tr>
+		<% end %>
+		</tbody>
+	</table>
+<% end %>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'my_widgets', :plugin => 'redmine_my_widgets' %>
+<% end %>

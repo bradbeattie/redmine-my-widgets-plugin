@@ -1,13 +1,15 @@
 <h3><%= l(:label_query_plural) %></h3>
 
-<% form_tag({}) do %>
-	<table class="list queries">		
-		<thead><tr>
-		<th><%=l(:label_query)%></th>
-		<th>#</th>
-		</tr></thead>
-		<tbody>	
+<table class="list queries">		
+	<thead>
+		<tr>
+			<th><%=l(:label_query)%></th>
+			<th>#</th>
+		</tr>
+	</thead>
+	<tbody>	
 		<% sidebar_queries.each do |query|
+			query = Query.find(query.id) # Necessary as sidebar_queries doesn't correctly initialize filters
 			issue_count = Issue.count(:include => [:status, :project], :conditions => query.statement)
 		%>
 		<tr class="<%= cycle('odd', 'even') %> <%= 'empty' if issue_count == 0 %>">
@@ -15,9 +17,8 @@
 			<td class="count"><%= issue_count %></td>
 		</tr>
 		<% end %>
-		</tbody>
-	</table>
-<% end %>
+	</tbody>
+</table>
 
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag 'my_widgets', :plugin => 'redmine_my_widgets' %>

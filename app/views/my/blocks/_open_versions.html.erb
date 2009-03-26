@@ -1,0 +1,26 @@
+<h3><%= l(:label_version_plural) %></h3>
+
+<table class="list">		
+	<thead>
+		<tr>
+			<th><%=l(:label_project)%></th>
+			<th><%=l(:label_version)%></th>
+			<th><%=l(:field_done_ratio)%></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% User.current.projects.collect { |project| project.versions }.flatten.each do |version| %>
+			<% if !version.completed? && version.fixed_issues.count > 0 %>
+				<tr>
+					<td><%= h(version.project) %></td>
+					<td><%= link_to h(version.name), :controller => 'versions', :action => 'show', :id => version %></td>
+					<td><%= progress_bar([version.closed_pourcent, version.completed_pourcent], :width => '15em', :legend => ('%0.0f%' % version.completed_pourcent)) %></td>
+		    	</tr>
+		    <% end %>  
+		<% end %>
+	</tbody>
+</table>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'my_widgets', :plugin => 'redmine_my_widgets' %>
+<% end %>

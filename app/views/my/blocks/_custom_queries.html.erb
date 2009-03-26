@@ -12,10 +12,10 @@
 			query = Query.find(query.id) # Necessary as sidebar_queries doesn't correctly initialize filters
 			issue_count = Issue.count(:include => [:status, :project], :conditions => query.statement)
 		%>
-		<tr class="<%= cycle('odd', 'even') %> <%= 'empty' if issue_count == 0 %>">
-			<td class="query"><%= link_to(h(query.name), :controller => 'issues', :action => 'index', :project_id => @project, :query_id => query) %></td>
-			<td class="count"><%= issue_count %></td>
-		</tr>
+			<tr class="<%= cycle('odd', 'even') %> <%= 'empty' if issue_count == 0 %>">
+				<td class="query"><%= link_to(h(query.name), :controller => 'issues', :action => 'index', :project_id => @project, :query_id => query) %></td>
+				<td class="count"><%= issue_count %></td>
+			</tr>
 		<% end %>
 	</tbody>
 </table>

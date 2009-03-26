@@ -14,7 +14,7 @@
 				<tr>
 					<td><%= h(version.project) %></td>
 					<td><%= link_to h(version.name), :controller => 'versions', :action => 'show', :id => version %></td>
-					<td><%= progress_bar([version.closed_pourcent, version.completed_pourcent], :width => '15em', :legend => ('%0.0f%' % version.completed_pourcent)) %></td>
+					<td><%= progress_bar([version.closed_pourcent, version.completed_pourcent], :width => '10em', :legend => ('%0.0f%' % version.completed_pourcent)) %></td>
 		    	</tr>
 		    <% end %>  
 		<% end %>

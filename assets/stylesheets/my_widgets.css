@@ -1,2 +1,6 @@
 table.queries tr.empty * { opacity: 0.5; }
 table.list td.progress-cell { white-space: nowrap; padding-right: 2.5em; }
+.version_overdue {background: #f55; border: 1px solid #f55; color: white; font-weight: bold;}
+.version_overdue:hover td {background: #f11; border: 1px solid #f11; color: white; font-weight: bold;}
+.version_overdue a {color:white;}
+

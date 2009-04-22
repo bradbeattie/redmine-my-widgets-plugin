@@ -3,4 +3,4 @@ table.list td.progress-cell { white-space: nowrap; padding-right: 2.5em; }
 .version_overdue table.progress { border: 1px solid #933; }
 .version_overdue table.progress td.closed { background: #e0baba; }
 .version_overdue table.progress td.done { background: #f0dede; }
-
+.cloud a { white-space: nowrap; margin: 0.5em; }

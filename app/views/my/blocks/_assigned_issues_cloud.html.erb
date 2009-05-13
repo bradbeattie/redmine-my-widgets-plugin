@@ -1,6 +1,6 @@
 <%    
     @allowed_projects = []
-    User.current.memberships.each {|m| @allowed_projects << m.project if m.role.allowed_to?(:view_issues)}
+    User.current.memberships.each {|m| @allowed_projects << m.project if m.roles.each {|role| role.allowed_to?(:view_issues)}}
     rows = @allowed_projects.collect {|p| p.members.collect { |m| m.user } }.flatten.uniq.sort
     data = ActiveRecord::Base.connection.select_all("select a.id as assigned_to_id, count(i.id) as total 
                                                 from #{Issue.table_name} i, #{IssueStatus.table_name} s, #{User.table_name} a

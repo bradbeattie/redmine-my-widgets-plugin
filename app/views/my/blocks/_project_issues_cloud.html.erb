@@ -1,0 +1,38 @@
+<%    
+    projects = User.current.memberships.collect {|m| m.project if m.roles.each {|role| role.allowed_to?(:view_issues)}}
+    data = ActiveRecord::Base.connection.select_all("select p.id as project_id, count(i.id) as total 
+												from #{Issue.table_name} i, #{IssueStatus.table_name} s, #{Project.table_name} p
+												where i.status_id=s.id and i.project_id=p.id and s.is_closed = false
+												and p.id in ("+projects.collect{|p| p.id}.join(",")+")
+												group by p.id").index_by { |x| x["project_id"].to_i }
+
+    smallest = 6
+    largest = 22
+    totals = data.collect { |aid, d| d["total"].to_i }
+    totals_min = totals.min
+    totals_max = totals.max
+    font_step = (largest - smallest).to_f / [totals_max - totals_min, 1].max.to_f
+%>
+
+<h3><%= l(:label_project_issues_cloud) %></h3>
+<% if data.empty? or projects.empty? %>
+    <p><i><%=l(:label_no_data)%></i></p>
+<% else %>
+    <div class="cloud">
+        <% for project in projects %>
+            <% if data[project.id] %>
+                <%= link_to(
+                        project.name,
+                        { :controller => "issues", :action => 'index', :set_filter => 1, "project_id" => project.id },
+                        { :style => "font-size: #{smallest + (data[project.id]["total"].to_i - totals_min) * font_step}pt;",
+                          :title => l(:label_x_open_issues_abbr, :count => data[project.id]["total"])
+                        }
+                    ) %>
+            <% end %>
+        <% end %>
+    </div>
+<% end %>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'my_widgets', :plugin => 'redmine_my_widgets' %>
+<% end %> 

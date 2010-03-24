@@ -6,18 +6,20 @@
 			<th><%=l(:label_project)%></th>
 			<th><%=l(:label_version)%></th>
 			<th><%=l(:field_done_ratio)%></th>
+			<th><%=l(:field_due_date)%></th>
 		</tr>
 	</thead>
 	<tbody>
 		<%
         User.current.projects.sort.each do |project|
           project.versions.each do |version|
-            if !version.completed? && version.fixed_issues.count > 0
+            if !version.closed? && !version.completed? && version.fixed_issues.count > 0
         %>
 				<tr class="<%= cycle('odd', 'even') %> <%= version.overdue? ? 'version_overdue' : '' %>">
 					<td><%= link_to(h(version.project), :controller => 'projects', :action => 'show', :id => version.project) %></td>
 					<td><%= link_to(h(version.name), :controller => 'versions', :action => 'show', :id => version) %></td>
 					<td class="progress-cell"><%= progress_bar([version.closed_pourcent, version.completed_pourcent], :width => '10em', :legend => ('%0.0f%' % version.completed_pourcent)) %></td>
+					<td><%= format_date(version.effective_date) %></td>
 		    	</tr>
 		    <% end %>  
 		  <% end %>
